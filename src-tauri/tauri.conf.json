@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "个人收支分析",
+  "productName": "Expense Lens",
   "version": "0.1.0",
   "identifier": "com.expenselens.local",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "个人收支分析",
+        "title": "Expense Lens",
         "width": 1440,
         "height": 960,
         "minWidth": 1080,
@@ -28,7 +28,7 @@
     "active": true,
     "targets": "all",
     "category": "Finance",
-    "shortDescription": "本地优先的个人开销分析工具",
+    "shortDescription": "本地优先的个人收支分析工具",
     "longDescription": "在本机导入、整理和分析微信支付与支付宝账单。"
   }
 }

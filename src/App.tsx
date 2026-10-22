@@ -161,7 +161,7 @@ function App() {
 
   return <div className="app-shell">
     <aside className="sidebar">
-      <div className="brand"><span className="brand-mark"><Wallet size={20}/></span><span><b>个人收支</b><small>本地账单分析</small></span></div>
+      <div className="brand"><span className="brand-mark"><Wallet size={20}/></span><span><b>Expense Lens</b><small>个人收支分析</small></span></div>
       <div className="nav-label">工作台</div>
       <nav>{nav.map(item=>{const Icon=item.icon;return <button key={item.id} className={`nav-item ${page===item.id?'active':''}`} onClick={()=>setPage(item.id)}><Icon size={18}/><span>{item.label}</span>{item.id==='import'&&<span className="nav-count">+</span>}</button>;})}</nav>
       <div className="sidebar-spacer"/>
