@@ -161,7 +161,7 @@ function App() {
 
   return <div className="app-shell">
     <aside className="sidebar">
-      <div className="brand"><span className="brand-mark"><Wallet size={20}/></span><span><b>拾账</b><small>个人开销分析</small></span></div>
+      <div className="brand"><span className="brand-mark"><Wallet size={20}/></span><span><b>个人收支</b><small>本地账单分析</small></span></div>
       <div className="nav-label">工作台</div>
       <nav>{nav.map(item=>{const Icon=item.icon;return <button key={item.id} className={`nav-item ${page===item.id?'active':''}`} onClick={()=>setPage(item.id)}><Icon size={18}/><span>{item.label}</span>{item.id==='import'&&<span className="nav-count">+</span>}</button>;})}</nav>
       <div className="sidebar-spacer"/>
@@ -170,7 +170,7 @@ function App() {
       <div className="profile"><div className="avatar">我</div><span><b>个人账本</b><small>本地使用</small></span><MoreHorizontal size={18}/></div>
     </aside>
     <main className="main-area">
-      <header className="topbar"><div className="breadcrumbs"><span>拾账</span><span className="crumb-sep">/</span><b>{nav.find(n=>n.id===page)?.label}</b></div><div className="top-actions"><span className="local-badge"><ShieldCheck size={14}/> 数据只在本机</span><button className="icon-button theme-toggle" title={theme==='dark'?'切换到浅色模式':'切换到深色模式'} aria-label={theme==='dark'?'切换到浅色模式':'切换到深色模式'} aria-pressed={theme==='dark'} onClick={()=>setTheme(t=>t==='dark'?'light':'dark')}>{theme==='dark'?<Sun size={18}/>:<Moon size={18}/>}</button><button className="icon-button" title="帮助" onClick={()=>setPage('settings')}><CircleHelp size={18}/></button><button className="primary-button" onClick={()=>fileInput.current?.click()}><Upload size={16}/> 导入账单</button><input ref={fileInput} hidden type="file" multiple accept=".xlsx,.csv" onChange={e=>{void handleFiles(e.target.files);e.target.value='';}}/></div></header>
+      <header className="topbar"><div className="breadcrumbs"><span>个人收支分析</span><span className="crumb-sep">/</span><b>{nav.find(n=>n.id===page)?.label}</b></div><div className="top-actions"><span className="local-badge"><ShieldCheck size={14}/> 数据只在本机</span><button className="icon-button theme-toggle" title={theme==='dark'?'切换到浅色模式':'切换到深色模式'} aria-label={theme==='dark'?'切换到浅色模式':'切换到深色模式'} aria-pressed={theme==='dark'} onClick={()=>setTheme(t=>t==='dark'?'light':'dark')}>{theme==='dark'?<Sun size={18}/>:<Moon size={18}/>}</button><button className="icon-button" title="帮助" onClick={()=>setPage('settings')}><CircleHelp size={18}/></button><button className="primary-button" onClick={()=>fileInput.current?.click()}><Upload size={16}/> 导入账单</button><input ref={fileInput} hidden type="file" multiple accept=".xlsx,.csv" onChange={e=>{void handleFiles(e.target.files);e.target.value='';}}/></div></header>
       <section className="content">
         {loading?<div className="loading-state"><LoaderCircle className="spin"/>正在打开本地数据库…</div>:<>
           {page==='overview'&&<Overview dashboard={dashboard} previous={dashboardPrevious} range={range} setRange={setRange} source={dashboardSource} setSource={setDashboardSource} category={dashboardCategory} setCategory={setDashboardCategory} onOpenTransactions={()=>setPage('transactions')} onImport={()=>fileInput.current?.click()} />}

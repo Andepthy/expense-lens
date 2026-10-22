@@ -420,5 +420,5 @@ pub fn run() {
             clear_database
         ])
         .run(tauri::generate_context!())
-        .expect("failed to start Expense Lens");
+        .expect("failed to start expense lens application");
 }
