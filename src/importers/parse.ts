@@ -97,7 +97,8 @@ export async function parseBill(file: File, manualMapping: Record<string, number
     parsed.push({ transaction: tx, rowNumber: headerIndex + index + 2 });
   });
   linkRefunds(parsed);
-  return { source, headers, parsed, issues, rowCount: data.length, mappingNeeded, mapping, filename: file.name };
+  const rowCount=data.filter(row=>row.some(value=>clean(value))).length;
+  return { source, headers, parsed, issues, rowCount, mappingNeeded, mapping, filename: file.name };
 }
 
 function linkRefunds(parsed:ParsedRow[]):void{
@@ -117,7 +118,10 @@ function parseCsv(bytes: Uint8Array): string[][] {
   try { text = new TextDecoder('utf-8',{fatal:true}).decode(bytes); }
   catch { text = new TextDecoder('gb18030').decode(bytes); }
   if(isUtf8Bom)text=new TextDecoder('utf-8').decode(bytes);
-  const result = Papa.parse<string[]>(text.replace(/^\uFEFF/, ''), { skipEmptyLines: false });
+  // Some Alipay exports mix CRLF in the preamble with LF in the transaction table.
+  // Papa Parse detects one newline style from the file prefix, so normalize first.
+  const normalizedText=text.replace(/^\uFEFF/, '').replace(/\r\n|\r|\n/g,'\n');
+  const result = Papa.parse<string[]>(normalizedText, { skipEmptyLines: false });
   return result.data;
 }
 

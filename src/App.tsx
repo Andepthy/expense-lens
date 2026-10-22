@@ -87,13 +87,28 @@ function App() {
   const loadMore=async()=>{if(!info||transactions.length>=info.transactionCount)return;try{const next=await api.transactions(500,transactions.length);setTransactions(current=>[...current,...next]);}catch(e){notify(String(e),'error');}};
 
   const handleFiles=async(files:FileList|null)=>{
-    if(!files?.length)return;setBusy(true);const next:Draft[]=[];
-    const {parseBill}=await import('./importers/parse');
-    for(const file of Array.from(files)){
-      try {const result=await parseBill(file);next.push({file,result,choices:{}});}
-      catch(e){notify(`${file.name}：${String(e)}`,'error');}
+    if(!files?.length||busy)return;
+    // FileList is live: the input onChange clears its value immediately after this call.
+    const selectedFiles=Array.from(files);
+    setPage('import');
+    setBusy(true);
+    try {
+      const {parseBill}=await import('./importers/parse');
+      const next:Draft[]=[];
+      const failures:string[]=[];
+      for(const file of selectedFiles){
+        try {const result=await parseBill(file);next.push({file,result,choices:{}});}
+        catch(e){failures.push(`${file.name}：${String(e)}`);}
+      }
+      setDrafts(next);
+      if(failures.length)notify(failures.length===1?(failures[0]??'账单解析失败。'):`${failures.length} 个文件解析失败：${failures.slice(0,3).join('；')}`,'error');
+      else if(!next.length)notify('没有文件解析成功。请确认选择的是微信 XLSX 或支付宝 CSV 账单。','error');
+    } catch(e) {
+      setDrafts([]);
+      notify(`无法加载账单解析器：${String(e)}`,'error');
+    } finally {
+      setBusy(false);
     }
-    setDrafts(next);setBusy(false);if(next.length)setPage('import');
   };
   const changeMapping=async(index:number,field:string,column:number)=>{
     const old=drafts[index];if(!old)return;

@@ -14,6 +14,14 @@ describe('local bill adapters', () => {
     expect(result.parsed[0]?.transaction.kind).toBe('expense');
   });
 
+  it('parses Alipay exports that mix CRLF metadata with LF transaction rows', async () => {
+    const content = '支付宝交易明细\r\n导出时间：模拟\r\n\r\n交易时间,交易分类,交易对方,商品说明,收/支,金额,收/付款方式,交易状态,交易订单号\n2026-03-10 08:30:00,线下消费,模拟便利店,饮用水,支出,12.35,支付宝余额,交易成功,ali-mixed-001\n2026-03-10 09:00:00,退款,模拟便利店,退款,收入,2.00,支付宝余额,交易成功,ali-mixed-002\n';
+    const result=await parseBill(fileWithBytes('mixed-newlines.csv',new TextEncoder().encode(content)));
+    expect(result.rowCount).toBe(2);
+    expect(result.parsed).toHaveLength(2);
+    expect(result.parsed.map(row=>row.transaction.amountCents)).toEqual([1235,200]);
+  });
+
   it('scans a WeChat worksheet preamble and reports invalid amount rows', async () => {
     const workbook = XLSX.utils.book_new();
     const rows: unknown[][] = Array.from({ length: 17 }, () => ['微信支付账单流水']);
