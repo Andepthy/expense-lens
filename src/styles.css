@@ -38,3 +38,50 @@ html[data-theme='dark'] .detail-backdrop{background:rgba(3,8,14,.68)}
 html[data-theme='dark'] .recharts-cartesian-grid line{stroke:#354256}
 html[data-theme='dark'] .recharts-cartesian-axis-tick text{fill:#aab5c4}
 html[data-theme='dark'] .recharts-default-tooltip{background:#202d3e!important;border:1px solid #3b4a60!important;color:#e5ebf3!important}
+/* Keep controls legible on dark surfaces and give text more breathing room. */
+.topbar{height:68px}
+.nav-item{height:44px}
+.primary-button,.secondary-button,.danger-button{min-height:38px;height:auto;padding-top:8px;padding-bottom:8px}
+.icon-button{width:38px;height:38px}
+.filter-bar{height:auto;min-height:52px;flex-wrap:wrap}
+.ledger-table th,.ledger-table td{padding-top:12px;padding-bottom:12px}
+.merchant-row{min-height:34px}
+.rule-create input,.rule-create select,.ledger-controls select,.mapping-fields select,.edit-fields select,.pending-edit select{min-height:38px;height:auto}
+html[data-theme='dark'] .secondary-button,html[data-theme='dark'] .icon-button,html[data-theme='dark'] .ledger-controls select,html[data-theme='dark'] .filter-select,html[data-theme='dark'] .rule-create input,html[data-theme='dark'] .rule-create select,html[data-theme='dark'] .mapping-fields select,html[data-theme='dark'] .edit-fields select,html[data-theme='dark'] .pending-edit select{background-color:#263448!important;color:#e2e9f2!important;border-color:#46566d!important}
+html[data-theme='dark'] .secondary-button:hover,html[data-theme='dark'] .icon-button:hover{background-color:#31415a!important;color:#fff!important}
+html[data-theme='dark'] .text-button{background:transparent;color:#b8cbf0}
+html[data-theme='dark'] .danger-button{background:#472b32;color:#ffdadd;border-color:#76424b}
+html[data-theme='dark'] .db-status{color:#d2dceb}
+html[data-theme='dark'] .db-status small{color:#aab5c4}
+html[data-theme='dark'] .segmented button{color:#b3bfce}
+html[data-theme='dark'] .segmented button:first-child{background:#34445c;color:#f0f4fa}
+html[data-theme='dark'] .mapping-panel{background:#352f25;border-color:#5b4d36}
+html[data-theme='dark'] .radio-options label{background:#202d3e;color:#cbd5e2;border-color:#3b4a60}
+html[data-theme='dark'] .radio-options label.selected{background:#2b3c57;color:#f0f4fb;border-color:#7897d1;box-shadow:inset 0 0 0 1px rgba(120,151,209,.18)}
+html[data-theme='dark'] .radio-options label small{color:#aebbd0}
+html[data-theme='dark'] .radio-options label input{accent-color:#87a8ed}
+html[data-theme='dark'] .explainer-icon{background:#344765;color:#b5cafa}
+html[data-theme='dark'] .empty-batches{color:#c0cad8}
+html[data-theme='dark'] .history-count,html[data-theme='dark'] .pending-count{background:#3a3341;color:#e1c3f0}
+html[data-theme='dark'] input[type='date']{color-scheme:dark;background-color:#263448;color:#e2e9f2;border:1px solid #46566d}
+.filter-bar .segmented{height:40px;align-items:center}
+.filter-bar .segmented button{height:34px;min-width:58px}
+.filter-bar .segmented button.active{background:#fff;box-shadow:0 1px 3px #dce1e9;color:#52677f;font-weight:600}
+.filter-bar .segmented button:not(.active){background:transparent;box-shadow:none;color:#758196}
+.filter-bar .date-field input,.filter-select{height:40px;min-height:40px}
+.ledger-controls{align-items:center;flex-wrap:wrap}
+.ledger-controls>.search-box,.ledger-controls>.ledger-date,.ledger-controls>select{height:40px;min-height:40px}
+.ledger-date{border:1px solid #e5e9ef;border-radius:7px;background:#fff;color:#566376;padding:0 9px;font:inherit}
+.radio-options label{min-height:40px;display:flex;align-items:center;gap:8px}
+.radio-options label input{margin:0}
+.rule-create input,.rule-create select,.rule-create button{height:40px;min-height:40px}
+.top-actions>button,.heading-actions>button,.db-actions>button,.data-tool>button,.radio-options>button,.radio-options>label{height:40px;min-height:40px;box-sizing:border-box}
+html[data-theme='dark'] .filter-bar .segmented button.active{background:#34445c;color:#f0f4fa}
+html[data-theme='dark'] .filter-bar .segmented button:not(.active){background:transparent;color:#b3bfce}
+html[data-theme='dark'] .ledger-date{background:#263448;color:#e2e9f2;border-color:#46566d;color-scheme:dark}
+html[data-theme='dark'] .drop-icon,html[data-theme='dark'] .file-icon,html[data-theme='dark'] .batch-symbol{background:#26364d;color:#b5cafa}
+html[data-theme='dark'] .step{color:#9eacbf}
+html[data-theme='dark'] .step i{background:#202d3e;border-color:#43536a;color:#aebbd0}
+html[data-theme='dark'] .step.active{color:#b5cafa}
+html[data-theme='dark'] .step.active i{background:#344765;border-color:#52698a;color:#d7e3fb}
+html[data-theme='dark'] .step-line{background:#3b4a60}

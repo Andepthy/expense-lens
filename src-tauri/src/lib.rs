@@ -4,12 +4,85 @@ use serde::{Deserialize, Serialize};
 use std::{
     fs,
     path::{Path, PathBuf},
-    sync::Mutex,
+    sync::{Arc, Mutex},
 };
-use tauri::{Manager, State};
+use tauri::{Manager, State, WindowEvent};
 use uuid::Uuid;
 
 struct AppState(Mutex<store::Database>);
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+struct SavedWindowState {
+    width: u32,
+    height: u32,
+    maximized: bool,
+}
+
+fn configure_window_state(app: &tauri::AppHandle, data_dir: &Path) {
+    let Some(window) = app.get_webview_window("main") else {
+        return;
+    };
+    let state_path = data_dir.join("window-state.json");
+    let saved = fs::read_to_string(&state_path)
+        .ok()
+        .and_then(|contents| serde_json::from_str::<SavedWindowState>(&contents).ok())
+        .filter(|state| {
+            (900..=3840).contains(&state.width) && (600..=2160).contains(&state.height)
+        });
+    if let Some(saved) = saved {
+        let _ = window.set_size(tauri::PhysicalSize::new(saved.width, saved.height));
+        if saved.maximized {
+            let _ = window.maximize();
+        }
+    }
+
+    // Keep the last normal size available even if the first close happens while maximized.
+    let initial_size = saved
+        .map(|state| (state.width, state.height))
+        .or_else(|| {
+            window
+                .inner_size()
+                .ok()
+                .map(|size| (size.width, size.height))
+        })
+        .unwrap_or((1280, 820));
+    let normal_size = Arc::new(Mutex::new(initial_size));
+    let normal_size_on_event = Arc::clone(&normal_size);
+    let state_path_on_close = state_path.clone();
+    let event_window = window.clone();
+    window.on_window_event(move |event| match event {
+        WindowEvent::Resized(size) if !event_window.is_maximized().unwrap_or(false) => {
+            if let Ok(mut normal_size) = normal_size_on_event.lock() {
+                *normal_size = (size.width, size.height);
+            }
+        }
+        WindowEvent::CloseRequested { .. } => {
+            let maximized = event_window.is_maximized().unwrap_or(false);
+            let size = if maximized {
+                normal_size_on_event.lock().ok().map(|size| *size)
+            } else {
+                event_window.inner_size().ok().map(|size| {
+                    let size = (size.width, size.height);
+                    if let Ok(mut normal_size) = normal_size_on_event.lock() {
+                        *normal_size = size;
+                    }
+                    size
+                })
+            };
+            if let Some((width, height)) = size {
+                let state = SavedWindowState {
+                    width,
+                    height,
+                    maximized,
+                };
+                if let Ok(json) = serde_json::to_vec(&state) {
+                    let _ = fs::write(&state_path_on_close, json);
+                }
+            }
+        }
+        _ => {}
+    });
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -394,6 +467,9 @@ pub fn run() {
         .setup(|app| {
             let (path, config_path) =
                 app_database_paths(app.handle()).map_err(std::io::Error::other)?;
+            if let Some(data_dir) = config_path.parent() {
+                configure_window_state(app.handle(), data_dir);
+            }
             let db = store::Database::open(path, config_path)
                 .map_err(|e| std::io::Error::other(e.user_message()))?;
             app.manage(AppState(Mutex::new(db)));
