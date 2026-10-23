@@ -72,6 +72,8 @@ impl DbError {
             "数据库版本不兼容，未更改现有数据。".into()
         } else if msg.contains("busy") || msg.contains("locked") {
             "数据库正被占用，请稍后重试。".into()
+        } else if msg.contains("not found") {
+            "找不到要修改的记录，可能已被删除。请刷新后重试。".into()
         } else {
             "数据库操作失败，未确认的数据更改已回滚。请检查磁盘空间与文件权限后重试。".into()
         }
@@ -179,17 +181,7 @@ impl Database {
 
     pub fn category_rules(&self) -> Result<Vec<CategoryRule>, DbError> {
         let mut stmt=self.conn.prepare("SELECT id,name,pattern,category,priority,enabled,created_at FROM category_rules ORDER BY priority DESC,created_at DESC")?;
-        let rows = stmt.query_map([], |r| {
-            Ok(CategoryRule {
-                id: r.get(0)?,
-                name: r.get(1)?,
-                pattern: r.get(2)?,
-                category: r.get(3)?,
-                priority: r.get(4)?,
-                enabled: r.get::<_, i32>(5)? != 0,
-                created_at: r.get(6)?,
-            })
-        })?;
+        let rows = stmt.query_map([], map_category_rule)?;
         rows.collect::<Result<Vec<_>, _>>().map_err(Into::into)
     }
 
@@ -200,10 +192,29 @@ impl Database {
         if input.pattern.trim().is_empty() || input.category.trim().is_empty() {
             return Err(DbError("invalid category rule".into()));
         }
+        let name = input.name.trim().to_string();
+        let pattern = input.pattern.trim().to_string();
+        if let Some(id) = input.id {
+            let changed = self.conn.execute(
+                "UPDATE category_rules SET name=?1,pattern=?2,category=?3,enabled=?4 WHERE id=?5",
+                params![name, pattern, input.category, input.enabled as i32, id],
+            )?;
+            if changed == 0 {
+                return Err(DbError("category rule not found".into()));
+            }
+            return self
+                .conn
+                .query_row(
+                    "SELECT id,name,pattern,category,priority,enabled,created_at FROM category_rules WHERE id=?1",
+                    [id],
+                    map_category_rule,
+                )
+                .map_err(Into::into);
+        }
         let rule = CategoryRule {
             id: Uuid::new_v4().to_string(),
-            name: input.name.trim().to_string(),
-            pattern: input.pattern.trim().to_string(),
+            name,
+            pattern,
             category: input.category,
             priority: 0,
             enabled: input.enabled,
@@ -810,6 +821,18 @@ fn same_path(a: &Path, b: &Path) -> bool {
         .unwrap_or_else(|| a == b)
 }
 
+fn map_category_rule(r: &Row<'_>) -> rusqlite::Result<CategoryRule> {
+    Ok(CategoryRule {
+        id: r.get(0)?,
+        name: r.get(1)?,
+        pattern: r.get(2)?,
+        category: r.get(3)?,
+        priority: r.get(4)?,
+        enabled: r.get::<_, i32>(5)? != 0,
+        created_at: r.get(6)?,
+    })
+}
+
 fn map_transaction(r: &Row<'_>) -> rusqlite::Result<Transaction> {
     Ok(Transaction {
         id: r.get(0)?,
@@ -956,6 +979,7 @@ mod tests {
         .unwrap();
         original
             .save_category_rule(CategoryRuleInput {
+                id: None,
                 name: "模拟规则".into(),
                 pattern: "模拟食堂".into(),
                 category: "餐饮".into(),
@@ -1019,6 +1043,7 @@ mod tests {
         let mut db =
             Database::open(dir.path().join("test.db"), dir.path().join("location.json")).unwrap();
         db.save_category_rule(CategoryRuleInput {
+            id: None,
             name: "模拟交通关键词".into(),
             pattern: "模拟食堂".into(),
             category: "交通".into(),
@@ -1055,6 +1080,57 @@ mod tests {
             )
             .unwrap();
         assert_eq!(audit, 1);
+    }
+
+    #[test]
+    fn category_rule_edits_keep_identity_and_toggle_the_rule_engine() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut db =
+            Database::open(dir.path().join("test.db"), dir.path().join("location.json")).unwrap();
+        let created = db
+            .save_category_rule(CategoryRuleInput {
+                id: None,
+                name: "原始规则".into(),
+                pattern: "模拟食堂".into(),
+                category: "交通".into(),
+                enabled: true,
+            })
+            .unwrap();
+        let updated = db
+            .save_category_rule(CategoryRuleInput {
+                id: Some(created.id.clone()),
+                name: "更新后的规则".into(),
+                pattern: "模拟食堂".into(),
+                category: "交通".into(),
+                enabled: false,
+            })
+            .unwrap();
+        assert_eq!(updated.id, created.id);
+        assert_eq!(updated.name, "更新后的规则");
+        assert_eq!(updated.priority, created.priority);
+        assert_eq!(updated.created_at, created.created_at);
+        assert!(!updated.enabled);
+        assert_eq!(db.category_rules().unwrap().len(), 1);
+
+        db.import_files(vec![ImportFile {
+            filename: "mock.xlsx".into(),
+            source: "wechat".into(),
+            transactions: vec![mock_tx("tx-disabled-rule", "disabled-rule-id")],
+            duplicate_decisions: Vec::new(),
+        }])
+        .unwrap();
+        let imported = db.transactions(10, 0).unwrap().remove(0);
+        assert_eq!(imported.category, "餐饮");
+
+        assert!(db
+            .save_category_rule(CategoryRuleInput {
+                id: Some("missing-rule".into()),
+                name: "不存在".into(),
+                pattern: "任意".into(),
+                category: "其他".into(),
+                enabled: true,
+            })
+            .is_err());
     }
 
     #[test]

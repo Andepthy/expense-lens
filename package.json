@@ -17,6 +17,7 @@
     "@tauri-apps/api": "^2.8.0",
     "@tauri-apps/plugin-dialog": "^2.4.0",
     "lucide-react": "^0.468.0",
+    "material": "3.1.0",
     "papaparse": "^5.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

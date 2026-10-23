@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import type { ImportReport, DashboardData, DatabaseInfo, ImportBatch, Transaction, CategoryRule } from '../types';
+import type { ImportReport, DashboardData, DatabaseInfo, ImportBatch, Transaction, CategoryRule, CategoryRuleInput } from '../types';
 
 export const api = {
   databaseInfo: () => invoke<DatabaseInfo>('get_database_info'),
@@ -7,7 +7,7 @@ export const api = {
   dashboard: (start: string, end: string, source = 'all', category = 'all') => invoke<DashboardData>('get_dashboard', { start, end, source, category }),
   batches: () => invoke<ImportBatch[]>('get_batches'),
   categoryRules: () => invoke<CategoryRule[]>('get_category_rules'),
-  saveCategoryRule: (input:{name:string;pattern:string;category:string;enabled:boolean}) => invoke<CategoryRule>('save_category_rule',{input}),
+  saveCategoryRule: (input: CategoryRuleInput) => invoke<CategoryRule>('save_category_rule',{input}),
   deleteCategoryRule: (id:string) => invoke<void>('delete_category_rule',{id}),
   importTransactions: (filename: string, source: string, transactions: Transaction[]) =>
     invoke<ImportReport>('import_transactions', { filename, source, transactions }),

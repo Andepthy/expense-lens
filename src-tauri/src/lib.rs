@@ -228,6 +228,9 @@ pub struct CategoryRule {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CategoryRuleInput {
+    /// Present when editing an existing rule; absent when creating one.
+    #[serde(default)]
+    pub id: Option<String>,
     pub name: String,
     pub pattern: String,
     pub category: String,

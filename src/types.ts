@@ -44,6 +44,7 @@ export interface ImportBatch {
   addedCount: number; duplicateCount: number; excludedCount: number; undone: boolean;
 }
 export interface CategoryRule { id:string;name:string;pattern:string;category:string;priority:number;enabled:boolean;createdAt:string }
+export interface CategoryRuleInput { id?: string; name: string; pattern: string; category: string; enabled: boolean }
 export interface DatabaseInfo { path: string; transactionCount: number; schemaVersion: number; sizeBytes: number }
 export interface DashboardData {
   totalExpenseCents: number; totalIncomeCents: number; refundCents: number;
