@@ -24,3 +24,9 @@ uuid = { version = "1", features = ["v4", "serde"] }
 
 [dev-dependencies]
 tempfile = "3"
+
+# The VS 2026 toolset and cc-rs currently fail with D8050 when /Z7 is emitted
+# while compiling bundled SQLite. SQLite's C debug symbols are not needed for
+# the app's dev build, so keep them off for this dependency only.
+[profile.dev.package.libsqlite3-sys]
+debug = 0
