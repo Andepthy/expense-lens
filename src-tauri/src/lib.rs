@@ -468,14 +468,31 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
+            eprintln!("[setup] start");
+        
             let (path, config_path) =
-                app_database_paths(app.handle()).map_err(std::io::Error::other)?;
+                app_database_paths(app.handle()).map_err(|e| {
+                    eprintln!("[setup] app_database_paths failed: {e:?}");
+                    std::io::Error::other(e)
+                })?;
+            
+            eprintln!("[setup] database path: {}", path.display());
+            eprintln!("[setup] config path: {}", config_path.display());
+            
             if let Some(data_dir) = config_path.parent() {
+                eprintln!("[setup] configure window state: {}", data_dir.display());
                 configure_window_state(app.handle(), data_dir);
             }
-            let db = store::Database::open(path, config_path)
-                .map_err(|e| std::io::Error::other(e.user_message()))?;
+        
+            eprintln!("[setup] opening database");
+            let db = store::Database::open(path, config_path).map_err(|e| {
+                eprintln!("[setup] database open failed: {e:?}");
+                std::io::Error::other(e.user_message())
+            })?;
+        
             app.manage(AppState(Mutex::new(db)));
+            eprintln!("[setup] complete");
+        
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

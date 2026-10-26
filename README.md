@@ -5,7 +5,7 @@
 ## 环境要求
 
 - Windows 10/11，WebView2 Runtime
-- Node.js 20.19+ 和 pnpm 10+
+- Node.js 22.12+ 和 pnpm 10+
 - Rust stable/MSVC 工具链与 Visual Studio C++ Build Tools
 
 开发依赖通过 pnpm 安装，SQLite 通过 Rust `rusqlite` bundled feature 编译。
