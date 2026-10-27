@@ -4,6 +4,7 @@ import { AlertTriangle, CheckCircle2, FileSpreadsheet, Info, Upload } from 'luci
 import { useLens } from '../app/ExpenseLensProvider';
 import { useConfirm } from '../app/confirm';
 import { PageHeader, SectionCard } from '../components/layout';
+import { iconMarkup } from '../components/iconMarkup';
 import { SelectField, type SelectChoice } from '../components/inputs';
 import { EmptyState, InlineAlert } from '../components/states';
 import { SOURCE_LABELS } from '../domain/labels';
@@ -113,8 +114,12 @@ export function ImportsPage() {
         title="账单导入"
         description="在本机解析微信 XLSX 或支付宝 CSV 账单，确认字段与重复项后再写入数据库。"
         actions={
-          <Button variant="filled" onClick={() => void requestReselect()} disabled={busy}>
-            <Upload size={18} aria-hidden="true" />
+          <Button
+            icon={iconMarkup(Upload, 18)}
+            variant="filled"
+            onClick={() => void requestReselect()}
+            disabled={busy}
+          >
             {hasDrafts ? '重新选择文件' : '选择账单文件'}
           </Button>
         }
@@ -211,8 +216,12 @@ export function ImportsPage() {
               <p>
                 支持微信支付 XLSX 与支付宝 CSV。文件只在本机解析，不会上传；导入前会先展示字段映射、异常行与重复项。
               </p>
-              <Button variant="filled" onClick={() => void requestReselect()} disabled={busy}>
-                <Upload size={18} aria-hidden="true" />
+              <Button
+                icon={iconMarkup(Upload, 18)}
+                variant="filled"
+                onClick={() => void requestReselect()}
+                disabled={busy}
+              >
                 选择本地文件
               </Button>
             </div>

@@ -4,6 +4,7 @@ import { FolderCog, Plus } from 'lucide-react';
 import { useLens } from '../app/ExpenseLensProvider';
 import { useConfirm } from '../app/confirm';
 import { PageHeader, SectionCard } from '../components/layout';
+import { iconMarkup } from '../components/iconMarkup';
 import { SwitchInput } from '../components/inputs';
 import { EmptyState, InlineAlert, PageError, PageLoading } from '../components/states';
 import { RuleFormDialog } from '../components/RuleFormDialog';
@@ -64,8 +65,11 @@ export function RulesPage() {
         title="分类规则"
         description="用关键词规则改善后续导入的分类；不会回溯修改已有交易。"
         actions={
-          <Button variant="filled" onClick={() => setEditor({ mode: 'create', rule: null })}>
-            <Plus size={18} aria-hidden="true" />
+          <Button
+            icon={iconMarkup(Plus, 18)}
+            variant="filled"
+            onClick={() => setEditor({ mode: 'create', rule: null })}
+          >
             新建规则
           </Button>
         }

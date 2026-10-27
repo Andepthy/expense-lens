@@ -14,6 +14,7 @@ import {
 import { useLens } from '../app/ExpenseLensProvider';
 import { useConfirm } from '../app/confirm';
 import { PageHeader, SectionCard } from '../components/layout';
+import { iconMarkup } from '../components/iconMarkup';
 import { SelectField, TextFieldInput } from '../components/inputs';
 import { EmptyState, InlineAlert, PageError, PageLoading } from '../components/states';
 import {
@@ -114,8 +115,12 @@ export function DataPage({ onOpenImports }: DataPageProps) {
         title="数据管理"
         description="查看本地数据库状态，完成备份、恢复、导出与导入批次撤销。"
         actions={
-          <Button variant="filled" onClick={() => void run('backup', backup)} disabled={busy}>
-            <HardDrive size={18} aria-hidden="true" />
+          <Button
+            icon={iconMarkup(HardDrive, 18)}
+            variant="filled"
+            onClick={() => void run('backup', backup)}
+            disabled={busy}
+          >
             {pending === 'backup' ? '备份中…' : '备份数据库'}
           </Button>
         }
@@ -200,16 +205,20 @@ export function DataPage({ onOpenImports }: DataPageProps) {
           description="导出完整 JSON 备份，或按日期、平台、分类与类型导出 CSV。"
           footer={
             <div className="btn-row">
-              <Button variant="outlined" onClick={() => void run('json', exportJson)} disabled={busy}>
-                <Download size={18} aria-hidden="true" />
+              <Button
+                icon={iconMarkup(Download, 18)}
+                variant="outlined"
+                onClick={() => void run('json', exportJson)}
+                disabled={busy}
+              >
                 {pending === 'json' ? '导出中…' : '导出完整 JSON'}
               </Button>
               <Button
                 variant="filled"
+                icon={iconMarkup(Download, 18)}
                 onClick={() => void run('csv', () => exportCsv(exportFilters))}
                 disabled={busy || exportInvalid}
               >
-                <Download size={18} aria-hidden="true" />
                 {pending === 'csv' ? '导出中…' : '导出 CSV'}
               </Button>
             </div>

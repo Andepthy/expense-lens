@@ -145,8 +145,7 @@ export function TransactionsPage({ initialKind, onOpenImports }: TransactionsPag
         title="交易明细"
         description="在本地搜索、筛选并修正交易记录，金额与状态沿用现有统计口径。"
         actions={
-          <Button variant="outlined" onClick={onOpenImports}>
-            <Upload size={18} aria-hidden="true" />
+          <Button icon={iconMarkup(Upload, 18)} variant="outlined" onClick={onOpenImports}>
             导入更多账单
           </Button>
         }

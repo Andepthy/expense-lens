@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useLens } from '../app/ExpenseLensProvider';
 import { PageHeader, MetricCard, SectionCard } from '../components/layout';
+import { iconMarkup } from '../components/iconMarkup';
 import { SelectField, TextFieldInput } from '../components/inputs';
 import { EmptyState, InlineAlert, PageError, PageLoading, StatusChip } from '../components/states';
 import { TrendChart, type TrendPoint } from '../components/charts/TrendChart';
@@ -134,8 +135,7 @@ export function DashboardPage({ onOpenTransactions, onOpenImports }: DashboardPa
         title="概览"
         description="本期收支结构、趋势与需要留意的本地交易。"
         actions={
-          <Button variant="filled" onClick={onOpenImports}>
-            <Upload size={18} aria-hidden="true" />
+          <Button icon={iconMarkup(Upload, 18)} variant="filled" onClick={onOpenImports}>
             导入账单
           </Button>
         }
