@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { renderWithLens } from '../test/render';
 import { clickHost, fireDetail } from '../test/materialEvents';
@@ -49,6 +49,23 @@ describe('AppShell', () => {
     expect(refresh).not.toBeNull();
     clickHost(refresh!);
     expect(lens.refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses the system color scheme when no theme preference has been saved', () => {
+    vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true } as MediaQueryList);
+
+    renderWithLens(<AppShell />);
+
+    expect(document.documentElement.dataset.themeMode).toBe('dark');
+  });
+
+  it('keeps a saved theme preference over the system color scheme', () => {
+    window.localStorage.setItem('expense-lens.theme-mode', 'light');
+    vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true } as MediaQueryList);
+
+    renderWithLens(<AppShell />);
+
+    expect(document.documentElement.dataset.themeMode).toBeUndefined();
   });
 
   it('keeps the transactions intent when the dashboard opens pending records', () => {

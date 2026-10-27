@@ -6,10 +6,13 @@ export const THEME_STORAGE_KEY = 'expense-lens.theme-mode';
 
 export function readStoredTheme(): ThemeMode {
   try {
-    return window.localStorage.getItem(THEME_STORAGE_KEY) === 'dark' ? 'dark' : 'light';
+    const storedMode = window.localStorage.getItem(THEME_STORAGE_KEY);
+    if (storedMode === 'dark' || storedMode === 'light') return storedMode;
   } catch {
-    return 'light';
+    // Fall back to the system scheme when storage is unavailable.
   }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 /**
