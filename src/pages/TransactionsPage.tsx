@@ -154,7 +154,7 @@ export function TransactionsPage({ initialKind, onOpenImports }: TransactionsPag
 
       <div className="filter-bar" role="group" aria-label="交易筛选">
         <TextFieldInput
-          label="搜索商户、说明、分类或状态"
+          label="搜索"
           value={search}
           onValueChange={setSearch}
           leadingIcon={iconMarkup(Search, 20)}

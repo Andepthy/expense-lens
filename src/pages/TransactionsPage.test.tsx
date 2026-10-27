@@ -60,12 +60,12 @@ describe('TransactionsPage', () => {
 
   it('filters by search text and by kind select', () => {
     const { container } = renderTransactions();
-    fireDetail(queryField(container, '搜索商户、说明、分类或状态'), 'input', { value: '星巴克' });
+    fireDetail(queryField(container, '搜索'), 'input', { value: '星巴克' });
     expect(rowCount(container)).toBe(1);
     expect(document.body.textContent).toContain('星巴克');
     expect(document.body.textContent).not.toContain('模拟公司');
 
-    fireDetail(queryField(container, '搜索商户、说明、分类或状态'), 'input', { value: '' });
+    fireDetail(queryField(container, '搜索'), 'input', { value: '' });
     fireDetail(querySelect(container, '收支类型'), 'change', { value: 'income' });
     expect(rowCount(container)).toBe(1);
     expect(document.body.textContent).toContain('模拟公司');
@@ -122,7 +122,7 @@ describe('TransactionsPage', () => {
 
   it('distinguishes no results from the first-run empty state and resets filters', () => {
     const { container } = renderTransactions();
-    fireDetail(queryField(container, '搜索商户、说明、分类或状态'), 'input', { value: '不存在' });
+    fireDetail(queryField(container, '搜索'), 'input', { value: '不存在' });
     expect(document.body.textContent).toContain('没有匹配的交易');
     clickHost([...document.querySelectorAll('m-button')].find((button) => button.textContent?.trim() === '清除筛选')!);
     expect(rowCount(container)).toBe(3);
