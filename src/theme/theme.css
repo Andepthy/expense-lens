@@ -21,34 +21,126 @@
   --el-chart-expense: var(--mtrl-sys-color-primary);
   --el-chart-income: var(--mtrl-sys-color-success);
   --el-chart-refund: var(--mtrl-sys-color-info);
-  --el-chart-1: #6750a4;
-  --el-chart-2: #7d5260;
-  --el-chart-3: #625b71;
-  --el-chart-4: #006c4e;
-  --el-chart-5: #974800;
-  --el-chart-6: #0061a4;
-  --el-chart-7: #8a5a2b;
-  --el-chart-8: #4f6b3a;
-  --el-chart-9: #7a4e7e;
-  --el-chart-10: #4b6b7a;
+  --el-chart-1: AccentColor;
+  --el-chart-2: color-mix(in srgb, AccentColor 88%, #fff);
+  --el-chart-3: color-mix(in srgb, AccentColor 76%, #fff);
+  --el-chart-4: color-mix(in srgb, AccentColor 64%, #fff);
+  --el-chart-5: color-mix(in srgb, AccentColor 52%, #fff);
+  --el-chart-6: color-mix(in srgb, AccentColor 40%, #fff);
+  --el-chart-7: color-mix(in srgb, AccentColor 28%, #fff);
+  --el-chart-8: color-mix(in srgb, AccentColor 20%, #fff);
+  --el-chart-9: color-mix(in srgb, AccentColor 12%, #fff);
+  --el-chart-10: color-mix(in srgb, AccentColor 6%, #fff);
 
   color-scheme: light;
+}
+
+/* AccentColor exposes the OS accent colour in supported browsers/WebView2.
+   Unsupported system colors fall back to Material's baseline palette. */
+html[data-theme="baseline"]:not([data-theme-mode="dark"]) {
+  --mtrl-sys-color-primary: AccentColor;
+  --mtrl-sys-color-on-primary: AccentColorText;
+  --mtrl-sys-color-primary-container: color-mix(
+    in srgb,
+    AccentColor 18%,
+    #f4f4f4
+  );
+  --mtrl-sys-color-on-primary-container: #1b1b1b;
+  --mtrl-sys-color-secondary: color-mix(in srgb, AccentColor 78%, #303030);
+  --mtrl-sys-color-on-secondary: #ffffff;
+  --mtrl-sys-color-secondary-container: color-mix(in srgb, AccentColor 12%, #f4f4f4);
+  --mtrl-sys-color-on-secondary-container: #1b1b1b;
+  --mtrl-sys-color-tertiary: color-mix(in srgb, AccentColor 58%, #303030);
+  --mtrl-sys-color-on-tertiary: #ffffff;
+  --mtrl-sys-color-tertiary-container: color-mix(in srgb, AccentColor 8%, #f4f4f4);
+  --mtrl-sys-color-on-tertiary-container: #1b1b1b;
+  --mtrl-sys-color-primary-fixed: color-mix(in srgb, AccentColor 18%, #f4f4f4);
+  --mtrl-sys-color-primary-fixed-dim: color-mix(in srgb, AccentColor 30%, #f4f4f4);
+  --mtrl-sys-color-on-primary-fixed: #1b1b1b;
+  --mtrl-sys-color-on-primary-fixed-variant: #303030;
+  --mtrl-sys-color-secondary-fixed: color-mix(in srgb, AccentColor 12%, #f4f4f4);
+  --mtrl-sys-color-secondary-fixed-dim: color-mix(in srgb, AccentColor 22%, #f4f4f4);
+  --mtrl-sys-color-on-secondary-fixed: #1b1b1b;
+  --mtrl-sys-color-on-secondary-fixed-variant: #303030;
+  --mtrl-sys-color-tertiary-fixed: color-mix(in srgb, AccentColor 8%, #f4f4f4);
+  --mtrl-sys-color-tertiary-fixed-dim: color-mix(in srgb, AccentColor 16%, #f4f4f4);
+  --mtrl-sys-color-on-tertiary-fixed: #1b1b1b;
+  --mtrl-sys-color-on-tertiary-fixed-variant: #303030;
+  --mtrl-sys-color-surface: #fafafa;
+  --mtrl-sys-color-surface-dim: #e6e6e6;
+  --mtrl-sys-color-surface-bright: #ffffff;
+  --mtrl-sys-color-surface-variant: #e8e8e8;
+  --mtrl-sys-color-surface-container-lowest: #ffffff;
+  --mtrl-sys-color-surface-container-low: #f7f7f7;
+  --mtrl-sys-color-surface-container: #f2f2f2;
+  --mtrl-sys-color-surface-container-high: #ededed;
+  --mtrl-sys-color-surface-container-highest: #e8e8e8;
+  --mtrl-sys-color-on-surface: #1b1b1b;
+  --mtrl-sys-color-on-surface-variant: #484848;
+  --mtrl-sys-color-outline: #777777;
+  --mtrl-sys-color-outline-variant: #c8c8c8;
+  --mtrl-sys-color-inverse-primary: AccentColor;
+}
+
+html[data-theme="baseline"][data-theme-mode="dark"] {
+  --mtrl-sys-color-primary: AccentColor;
+  --mtrl-sys-color-on-primary: AccentColorText;
+  --mtrl-sys-color-primary-container: color-mix(
+    in srgb,
+    AccentColor 30%,
+    #282828
+  );
+  --mtrl-sys-color-on-primary-container: #f5f5f5;
+  --mtrl-sys-color-secondary: color-mix(in srgb, AccentColor 76%, #d8d8d8);
+  --mtrl-sys-color-on-secondary: #1b1b1b;
+  --mtrl-sys-color-secondary-container: color-mix(in srgb, AccentColor 24%, #282828);
+  --mtrl-sys-color-on-secondary-container: #f5f5f5;
+  --mtrl-sys-color-tertiary: color-mix(in srgb, AccentColor 58%, #d8d8d8);
+  --mtrl-sys-color-on-tertiary: #1b1b1b;
+  --mtrl-sys-color-tertiary-container: color-mix(in srgb, AccentColor 18%, #282828);
+  --mtrl-sys-color-on-tertiary-container: #f5f5f5;
+  --mtrl-sys-color-primary-fixed: color-mix(in srgb, AccentColor 28%, #d8d8d8);
+  --mtrl-sys-color-primary-fixed-dim: color-mix(in srgb, AccentColor 42%, #d8d8d8);
+  --mtrl-sys-color-on-primary-fixed: #1b1b1b;
+  --mtrl-sys-color-on-primary-fixed-variant: #303030;
+  --mtrl-sys-color-secondary-fixed: color-mix(in srgb, AccentColor 24%, #d8d8d8);
+  --mtrl-sys-color-secondary-fixed-dim: color-mix(in srgb, AccentColor 34%, #d8d8d8);
+  --mtrl-sys-color-on-secondary-fixed: #1b1b1b;
+  --mtrl-sys-color-on-secondary-fixed-variant: #303030;
+  --mtrl-sys-color-tertiary-fixed: color-mix(in srgb, AccentColor 18%, #d8d8d8);
+  --mtrl-sys-color-tertiary-fixed-dim: color-mix(in srgb, AccentColor 28%, #d8d8d8);
+  --mtrl-sys-color-on-tertiary-fixed: #1b1b1b;
+  --mtrl-sys-color-on-tertiary-fixed-variant: #303030;
+  --mtrl-sys-color-surface: #141414;
+  --mtrl-sys-color-surface-dim: #101010;
+  --mtrl-sys-color-surface-bright: #383838;
+  --mtrl-sys-color-surface-variant: #303030;
+  --mtrl-sys-color-surface-container-lowest: #0d0d0d;
+  --mtrl-sys-color-surface-container-low: #1b1b1b;
+  --mtrl-sys-color-surface-container: #202020;
+  --mtrl-sys-color-surface-container-high: #292929;
+  --mtrl-sys-color-surface-container-highest: #343434;
+  --mtrl-sys-color-on-surface: #e6e6e6;
+  --mtrl-sys-color-on-surface-variant: #c6c6c6;
+  --mtrl-sys-color-outline: #929292;
+  --mtrl-sys-color-outline-variant: #494949;
+  --mtrl-sys-color-inverse-primary: AccentColor;
 }
 
 html[data-theme-mode="dark"] {
   color-scheme: dark;
   --el-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px 1px rgba(0, 0, 0, 0.25);
   --el-shadow-2: 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.35);
-  --el-chart-1: #d0bcff;
-  --el-chart-2: #efb8c8;
-  --el-chart-3: #ccc2dc;
-  --el-chart-4: #8cd6af;
-  --el-chart-5: #ffb95c;
-  --el-chart-6: #99cbff;
-  --el-chart-7: #ffb786;
-  --el-chart-8: #b6d39c;
-  --el-chart-9: #e3b7e6;
-  --el-chart-10: #a9ccd8;
+  --el-chart-1: AccentColor;
+  --el-chart-2: color-mix(in srgb, AccentColor 88%, #000);
+  --el-chart-3: color-mix(in srgb, AccentColor 76%, #000);
+  --el-chart-4: color-mix(in srgb, AccentColor 64%, #000);
+  --el-chart-5: color-mix(in srgb, AccentColor 52%, #000);
+  --el-chart-6: color-mix(in srgb, AccentColor 40%, #000);
+  --el-chart-7: color-mix(in srgb, AccentColor 28%, #000);
+  --el-chart-8: color-mix(in srgb, AccentColor 20%, #000);
+  --el-chart-9: color-mix(in srgb, AccentColor 12%, #000);
+  --el-chart-10: color-mix(in srgb, AccentColor 6%, #000);
 }
 
 html,
