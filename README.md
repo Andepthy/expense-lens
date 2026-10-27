@@ -10,6 +10,8 @@
 
 开发依赖通过 pnpm 安装，SQLite 通过 Rust `rusqlite` bundled feature 编译。
 
+Windows 下，`pnpm tauri:dev` 和 `pnpm tauri:build` 会检查对应的 `src-tauri/target/debug` 或 `release` 构建目录，避免沙箱工作区的 Low 标签传播到可执行文件并限制 WebView2 用户数据目录写入。若构建目录仍带 Low 标签，修复会请求一次 Windows 管理员授权；已是 Medium 的目录不会重复请求。
+
 ## 安装、运行和构建
 
 ```powershell

@@ -10,8 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "tauri": "tauri",
-    "tauri:dev": "cd src-tauri && tauri dev",
-    "tauri:build": "cd src-tauri && tauri build"
+    "tauri:dev": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/repair-tauri-integrity.ps1 -Profile debug && cd src-tauri && tauri dev",
+    "tauri:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/repair-tauri-integrity.ps1 -Profile release && cd src-tauri && tauri build"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.8.0",
